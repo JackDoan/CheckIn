@@ -47,7 +47,7 @@ while True:
        if '\n' in line:
          line.remove('\n')
        linestr = ''.join(line)
-       print("Looking up " + linestr)
+       print("Looking up ID " + linestr)
        db.execute("select * from students where tag = ?", (linestr,))
        print(str(db.fetchone()))
        line = []

@@ -1,0 +1,6 @@
+rm -f control.tar.gz data.tar.gz checkin.opk
+cd control
+tar zcvf ../control.tar.gz ./*
+cd ..
+tar zcvf data.tar.gz ../daemon ../gui
+ar -r checkin.opk debian-binary control.tar.gz data.tar.gz
