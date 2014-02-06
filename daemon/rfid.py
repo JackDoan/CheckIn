@@ -1,8 +1,9 @@
+#!/usr/bin/env python
 import serial, os, time, datetime, datt, sqlite3
 
 line = []
 
-conn = sqlite3.connect("datt.db")
+conn = sqlite3.connect("/usr/local/checkin/datt.db")
 db = conn.cursor()
 
 db.execute("Select COUNT(*) from students")

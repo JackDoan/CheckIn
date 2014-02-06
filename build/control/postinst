@@ -1,0 +1,2 @@
+ln -s /usr/local/checkin/daemon/rfid.py /usr/local/bin/checkin
+chmod +x /usr/local/bin/checkin

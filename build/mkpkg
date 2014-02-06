@@ -1,6 +1,17 @@
-rm -f control.tar.gz data.tar.gz checkin.opk
+rm -f checkin.opk
 cd control
 tar zcvf ../control.tar.gz ./*
 cd ..
-tar zcvf data.tar.gz ../daemon ../gui
+cp -r ../daemon usr/local/checkin/
+cp -r ../gui usr/local/checkin/
+tar zcvf data.tar.gz usr
 ar -r checkin.opk debian-binary control.tar.gz data.tar.gz
+rm -rf control.tar.gz data.tar.gz usr/local/checkin/
+cd ../../
+git checkout gh-pages
+cp checkin-quark/build/checkin.opk checkin.opk
+git add checkin.opk
+git commit -m "updated .opk package"
+git push
+git checkout master
+
