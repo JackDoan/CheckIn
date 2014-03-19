@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import serial, os, time, datetime, libcheckin, sqlite3
 chn = libcheckin
-line = []
-
-
+line = ''
+linestr = ''
+fail = 0
 loc = "D117"
 status = "Test"
 conn = sqlite3.connect("./chn.db")
@@ -22,7 +22,7 @@ try:
 		parity=serial.PARITY_NONE,\
 		stopbits=serial.STOPBITS_ONE,\
 		bytesize=serial.EIGHTBITS,\
-		timeout=0)
+		timeout=None)
 except serial.SerialException, e:
   print("could not open serial port!!!")
   noSerial = 1
@@ -32,7 +32,7 @@ except serial.SerialException, e:
 	def close(self):
 	  pass
   ser = fakeser()
-
+delchars = ''.join(c for c in map(chr, range(256)) if not c.isalnum())
 if noSerial == 0:
 	os.system("gpio export 40")
 	os.system("gpio export 41")
@@ -44,13 +44,13 @@ if noSerial == 0:
 	os.system("gpio write 41 0")
 	os.system("gpio write 4 1")
 	chn.beep()
-	ip = os.popen("ifconfig wlan0 | grep inet | awk '{print $2}' | sed -e s/.:/*/").read()
+	ip = os.popen("ifconfig wlan0 | grep inet | awk '{print $2}' | sed -e s/....://").read()
 	chn.lcdClear()
 	chn.lcdRow(0)
 	chn.lcdWrite("IP Address:")
-	chn.lcdRow(1)																   
-	chn.lcdWrite(ip[4:-1])
-	os.system("sleep 3")
+	chn.lcdRow(1)
+	chn.lcdWrite(str.strip(ip))
+	os.system("sleep 2")
 	chn.lcdClear()
 	chn.lcdWrite("Checkin v0.1")
 	chn.lcdRow(1)
@@ -58,22 +58,12 @@ if noSerial == 0:
 
 while True:
 	if noSerial == 0:
-		for c in ser.read():
-			line.append(c)
-			if c == '\n':
-				chn.beep()
-				chn.lcdClear()
-			if '\x03' in line:
-				line.remove('\x03')
-			if '\x02' in line:
-				line.remove('\x02')
-			if '\r' in line:
-				line.remove('\r')
-			if '\n' in line:
-				line.remove('\n')
-			linestr = ''.join(line)
-			line = []
-			break
+		line = ser.readline()
+		if line:
+			linestr = line.translate(None, delchars)
+			chn.beep()
+			chn.lcdClear()
+			line = '' 
 	else:
 		linestr = raw_input("Student ID: ")
 
@@ -88,11 +78,12 @@ while True:
 		db.execute("INSERT INTO `records` (`student_id`, `location`, `time`, `status`) VALUES (?, ?, ?, ?);", (student_id, loc, scantime, status,))
 		conn.commit()
 		print("Record stored at: " + str(scantime))
+		fail = 0
 	else:
 		print "No result"
 		student = "Tag not assigned!"
 		fail = 1
-
+	linestr = ''
 	if noSerial == 0:
 		chn.lcdClear()
 		chn.lcdRow(0)
