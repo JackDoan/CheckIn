@@ -16,14 +16,14 @@ def lcdClear():
 
 def lcdRow(row):
   """Change to a specific row on the LCD"""
-  if row == 0 or 1 or 2 or 3:
+  if row == 0 or 1:
     ttyEcho("ROW" + str(row)) 
   else:
     print("You suck, that's not a row.")
 
 def lcdClearRow(row):
   """Clear a specific row on the LCD"""
-  if row == 0 or 1 or 2 or 3:
+  if row == 0 or 1:
     ttyEcho("ROW" + str(row))
     ttyEcho("\"W                    \"")
   else:

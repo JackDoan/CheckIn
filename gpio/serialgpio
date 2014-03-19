@@ -1,0 +1,11 @@
+gpio export 40
+gpio export 41
+gpio export 4
+gpio dir 40 out
+gpio dir 41 out
+gpio dir 4 out
+gpio write 40 0
+gpio write 41 0
+gpio write 4 1
+
+alias beep="echo BEEP > /dev/ttyS0"

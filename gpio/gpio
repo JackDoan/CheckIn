@@ -1,0 +1,33 @@
+#!/bin/bash
+
+case $1 in
+
+"")
+	echo USAGE:
+;;
+
+"status")
+	cat /sys/kernel/debug/gpio
+;;
+
+"export")
+	echo -n $2 > /sys/class/gpio/export
+;;
+
+"dir")
+	if [ $3 == "out" ]
+	then
+	a='/sys/class/gpio/gpio'
+	b='/direction'
+	echo -n "out" > $a$2$b
+	fi
+;;
+
+"write")
+	a='/sys/class/gpio/gpio'
+	b='/value'
+	echo -n $3 > $a$2$b
+;;
+
+
+esac

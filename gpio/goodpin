@@ -1,0 +1,33 @@
+#!/bin/bash
+
+3 = LED
+4 = level shifter on
+5 = reset mpci
+6 = turn wifi off
+7 = value of J2
+8 = SPI enable for ADC
+10 = if gpio42=0 then controls Arduino pin 10
+12 = reset Cypress I2C expander
+14 = controls Arduino pin 2 when gpio31=0
+15 = controls Arduino pin 3 when gpio30=0
+0 = enables pullup on gpio14 / Arduino pin 2
+1 = enables pullup on gpio15 / Arduino pin 3
+-------------------------------------------------
+16 = Arduino 10 / selected by gpio42 / also PWM #7
+17 = Arduino 5 / PWM 5
+18 = Arduino 3 / when gpio30=1 / PWM3
+19 = Arduino 9 / PWM 1
+20 = when 0: enable A5 / when 1: enable gpio49
+21 = when 0: enable A4 / when 1: enable gpio48
+22 = when 0: enable A3 / when 1: enable gpio47
+23 = when 0: enable A2 / when 1: enable gpio46
+24 = Arduino 6 / PWM 6
+25 = Arduino 11 when gpio43=1 / PWM 4
+26 = Arduino 8
+27 = Arduino 7
+28 = Arduino 4
+
+
+
+
+

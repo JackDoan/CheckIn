@@ -1,0 +1,2 @@
+cd /usr/local/checkin
+python rfid.py &
