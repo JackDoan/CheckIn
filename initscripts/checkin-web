@@ -1,64 +1,36 @@
 #!/bin/sh
-### BEGIN INIT INFO
-# Provides:sshd
-# Required-Start:$remote_fs $syslog $networking
-# Required-Stop:$remote_fs $syslog
-# Default-Start:2 3 4 5
-# Default-Stop:1
-# Short-Description:Dropbear Secure Shell server
-### END INIT INFO
-#
-# Do not configure this file. Edit /etc/default/dropbear instead!
-#
-
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=
-NAME=checkin
-DESC="CheckIn"
-PIDFILE=/var/run/checkin.pid
-
-set -e
-readonly_rootfs=0
-for flag in `awk '{ if ($2 == "/") { split($4,FLAGS,",") } }; END { for (f in FLAGS) print FLAGS[f] }' </proc/mounts`; do
-  case $flag in
-     ro)
-      readonly_rootfs=1
-       ;;
-     esac
- done
-
- if [ $readonly_rootfs = "1" ]; then
- 	#lol
- else
-	#lol
- fi
+# chkconfig: 45 99 99
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/bin/python
+NAME=CheckIn-Web
+DESC="CheckIn Web Service"
+OPTS="/usr/local/CheckIn/web/http.py"
+PIDFILE=/var/run/$NAME.pid
+. /lib/lsb/init-functions
 
 
 case "$1" in
-	start)
- 		echo -n "Starting $DESC: "
-		start-stop-daemon -S -p $PIDFILE 
-		echo "$NAME."
-	;;
-
-	stop)
-  		echo -n "Stopping $DESC: "
-		start-stop-daemon -K -x "$DAEMON" -p $PIDFILE
-		echo "$NAME."
-	;;
-
-  restart|force-reload)
-	echo -n "Restarting $DESC: "
-	start-stop-daemon -K -x "$DAEMON" -p $PIDFILE
-	sleep 1
-	start-stop-daemon -S -p $PIDFILE
+  start)
+	echo -n "Starting $DESC: "
+	start-stop-daemon --start --background -x "$DAEMON" -- $OPTS
 	echo "$NAME."
 	;;
-
-	*)
-		N=/etc/init.d/$NAME
-		echo "Usage: $N {start|stop|restart|force-reload}" >&2
-		exit 1
+  stop)
+	echo -n "Stopping $DESC: "
+	start-stop-daemon --stop -x "$DAEMON"
+	echo "$NAME."
+	;;
+  restart|force-reload)
+	echo -n "Restarting $DESC: "
+	start-stop-daemon --stop -x "$DAEMON"
+	sleep 1
+	start-stop-daemon --start --background -x "$DAEMON" -- $OPTS
+	echo "$NAME."
+	;;
+  *)
+	N=/etc/init.d/checkin-web
+	echo "Usage: $N {start|stop|restart|force-reload}" >&2
+	exit 1
 	;;
 esac
 

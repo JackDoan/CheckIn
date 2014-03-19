@@ -6,7 +6,7 @@ linestr = ''
 fail = 0
 loc = "D117"
 status = "Test"
-conn = sqlite3.connect("./chn.db")
+conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 db = conn.cursor()
 db.execute("Select COUNT(*) from students")
 studentCount = str(db.fetchone()[0])

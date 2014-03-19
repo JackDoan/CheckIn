@@ -34,7 +34,7 @@ def login():
 @app.route('/data')
 @requires_auth
 def data():
-	conn = sqlite3.connect("../chn.db")
+	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
 	#db.execute("Select * from config")
 	#config = db.fetchall()
