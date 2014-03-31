@@ -1,0 +1,12 @@
+take control of all required GPIO
+    set 0 and 1 to UART
+    
+initialize display - HD44780 20x4
+    RS RW E D4 D5 D6 D7 BL
+    2  3  8 4  5  6  7  9
+    write a kernel driver to print dmesg on boot?
+    
+initialize keypad
+    pins? may need a shift register.
+    
+initialize /dev/ttyS0 (ID-12LA)
