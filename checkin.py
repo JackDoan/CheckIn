@@ -16,21 +16,21 @@ print(welcomemsg)
 noSerial = 0
 
 try:
-     ser = serial.Serial(
-       port='/dev/ttyS0',\
-       baudrate=9600,\
-       parity=serial.PARITY_NONE,\
-       stopbits=serial.STOPBITS_ONE,\
-       bytesize=serial.EIGHTBITS,\
-         timeout=0)
+	ser = serial.Serial(
+		port='/dev/ttyS0',\
+		baudrate=9600,\
+		parity=serial.PARITY_NONE,\
+		stopbits=serial.STOPBITS_ONE,\
+		bytesize=serial.EIGHTBITS,\
+		timeout=0)
 except serial.SerialException, e:
   print("could not open serial port!!!")
   noSerial = 1
   class fakeser:
-    def read(self):
-      return [0,0,0,0]
-    def close(self):
-      pass
+	def read(self):
+	  return [0,0,0,0]
+	def close(self):
+	  pass
   ser = fakeser()
 
 if noSerial == 0:
@@ -48,7 +48,7 @@ if noSerial == 0:
 	chn.lcdClear()
 	chn.lcdRow(0)
 	chn.lcdWrite("IP Address:")
-	chn.lcdRow(1)                                                                   
+	chn.lcdRow(1)																   
 	chn.lcdWrite(ip[4:-1])
 	os.system("sleep 3")
 	chn.lcdClear()
@@ -83,11 +83,11 @@ while True:
 	if result:
 		student = str(result[1])[0:15]
 		student_id = result[0]
-                print("Found student ID " + str(student_id) + " named " + student)
+		print("Found student ID " + str(student_id) + " named " + student)
 		scantime = time.time()
 		db.execute("INSERT INTO `records` (`student_id`, `location`, `time`, `status`) VALUES (?, ?, ?, ?);", (student_id, loc, scantime, status,))
 		conn.commit()
-                print("Record stored at: " + str(scantime))
+		print("Record stored at: " + str(scantime))
 	else:
 		print "No result"
 		student = "Tag not assigned!"
@@ -99,7 +99,7 @@ while True:
 		if fail == 1:
 			chn.lcdWrite("ERROR")
 		else:  
-			chn.lcdWrite("Welcome to class")                                             
+			chn.lcdWrite("Welcome to class")											 
 		chn.lcdRow(1)
 		chn.lcdWrite(student)
 

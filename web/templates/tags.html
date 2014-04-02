@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+  <head>
+    <title>CheckIn | Tags</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+	var p = window.location.protocol + '//'
+	// current location must return 200 OK for this GET
+	signout  = window.location.href.replace(p, p + 'logout:password@')
+        signout  = window.location.href.replace('/data', '')
+    </script>
+    <style>
+	body {
+		font-family: Droid Sans, Courier, monospace;
+	     }
+    </style>
+  </head>
+  
+  <body>
+    <div class="navbar navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">CheckIn</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li> <a href="#">Home</a> </li>
+            <li> <a href="/status">Status</a> </li>
+            <li> <a href="/data">Data</a> </li>
+	    <li class="active"> <a href="/tags">Tags</a> </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+        <li><a onClick="window.location = signout">Sign Out</a></li>
+        </div>
+        <!-- /.nav-collapse -->
+      </div>
+      <!-- /.container -->
+    </div>
+    <!-- /.navbar -->
+    <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+	<div class="page-header">
+          <h1 style="font-family: Droid Sans, Courier, monospace;">Student / Tag Management<small> Add, update, and remove students and tags.</small></h1>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+    <div class="col-sm-8">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title" style="font-family: Droid Sans, Courier, monospace;">Student / Tag Relationships</h3>
+          </div>
+          <div class="panel-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Tag</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+	<tr>
+	{% for s in students %}
+            <td>{% print(s[0]) %}</td>
+            <td>{% print(s[1]) %}</td>
+            <td>{% print(s[2]) %}</td>   
+            <td><div class="btn-group btn-group-xs">
+		 <a href="/tags/edit/{% print(s[1]) %}" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
+		<a href="/tags/delete/{% print(s[1]) %}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+		</div></td>
+          </tr>
+	{% endfor %} 
+        <tr>
+	<div class="input-group input-group-sm">
+	<form action="/tags/add">
+	    <td><input type="text" class="form-control" placeholder="New Student ID" name="id"></td>
+            <td><input type="text" class="form-control" placeholder="New Name" name="name"></td>
+            <td><input type="text" class="form-control" placeholder="Scan New Tag Here" name="tag"></td>
+            <td><button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button></td>
+	</form></div>
+	</tbody>
+      </table>
+      </div></div>
+     </div>
+     <div class="col-sm-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title" style="font-family: Droid Sans, Courier, monospace;">Find a Student</h3>
+          </div>
+          <div class="panel-body"><form action="/tags/search" method="get">
+	    <div class="input-group">
+		<input type="text" class="form-control" name="id" placeholder="ID to find">
+		<span class="input-group-btn">
+			<button class="btn btn-primary" type="button">Go!</button>
+		</span></div><br>
+		<div class="input-group">
+		<input type="text" class="form-control" name="student" placeholder="Name to find">
+                <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button">Go!</button>
+                </span></div><br>
+		<div class="input-group">
+		<input type="text" class="form-control" name="tag" placeholder="Tag to find">
+                <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button">Go!</button>
+                </span></div>
+	    </form>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div class="row"><div class="col-sm-12">
+      <div class="well well-sm"><b>&copy; 2014 Doan Engineering</b></div>
+      </div></div>
+      </div></div>
+    <!--/.container+row+col-->
+  </body>
+
+</html>

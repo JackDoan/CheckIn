@@ -1,11 +1,7 @@
 #!/usr/bin/env python
-from flask import Flask
-from flask import render_template
+from flask import Flask, render_template, request, Response
 import sqlite3, time
-
 from functools import wraps
-from flask import request, Response
-
 
 def check_auth(username, password):
     """This function is called to check if a username /
@@ -37,7 +33,7 @@ def login():
 
 @app.route('/data')
 @requires_auth
-def hello_world():
+def data():
 	conn = sqlite3.connect("../chn.db")
         db = conn.cursor()
         db.execute("Select rowid,* from records order by rowid desc")
@@ -50,9 +46,21 @@ def hello_world():
 	  r[3] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(r[3]))
         conn.close()
         return render_template('data.html', records=records)
+
+@app.route('/tags')
+@requires_auth
+def tags():
+	conn = sqlite3.connect("../chn.db")
+        db = conn.cursor()
+	db.execute("Select rowid,* from students")
+	t_students = db.fetchall()
+        students = map(list, t_students)
+	conn.close()
+	return render_template('tags.html', students=students)
+
 @app.route('/test')
-def test1():
-	conn = sqlite3.connect("../datt.db")
+def test():
+	conn = sqlite3.connect("../chn.db")
 	db = conn.cursor()
 	db.execute("Select * from students")
 	studentnames = db.fetchall()
