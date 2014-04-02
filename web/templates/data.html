@@ -33,16 +33,19 @@
     <!-- /.navbar -->
     <div class="container">
     <div class="row">
-      <div class="col-sm-offset-1 col-sm-10">
-      <div class="jumbotron">
-            <h1>Welcome!</h1>
-            <p>This is the data analysis page for Checkin Attendance.</p>
-      </div>
+      <div class="col-sm-12">
+	<div class="page-header">
+          <h1>Attendance Data<small> Presented with administrator-friendly charts!</small></h1>
+        </div>
       </div>
     </div>
     <div class="row">
-    <div class="col-sm-offset-1 col-sm-10">
-      <hr>
+    <div class="col-sm-8">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Attendance Records</h3>
+          </div>
+          <div class="panel-body">
       <table class="table">
         <thead>
           <tr>
@@ -67,10 +70,34 @@
 	{% endfor %} 
         </tbody>
       </table>
-      <footer>
-        <p>&copy; Doan Engineering</p>
-      </footer>
-    </div></div></div></div>
+      </div></div>
+     </div>
+     <div class="col-sm-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Quick Stats</h3>
+          </div>
+          <div class="panel-body">
+            <b>Present/Absent Ratio: 40%</b>
+            <div class="progress progress-striped">
+              <div class="progress-bar progress-bar-success" role="progressbar" style="width: 40%"></div>
+            </div>
+            <b>Tardy/On Time</b>
+            <div class="progress progress-striped">
+              <div class="progress-bar progress-bar-warning" role="progressbar" style="width: 55%"></div>
+            </div>
+            <b>Very Bad Ratio: 83%</b>
+            <div class="progress progress-striped">
+              <div class="progress-bar progress-bar-danger" role="progressbar" style="width: 83%"></div>
+        </div>
+        </div>
+      </div>
+      </div>
+      </div>
+      <div class="row"><div class="col-sm-12">
+      <div class="well well-sm"><b>&copy; 2014 Doan Engineering</b></div>
+      </div></div>
+      </div></div>
     <!--/.container+row+col-->
   </body>
 

@@ -33,7 +33,3 @@ def lcdWrite(words):
   """Write to the LCD"""
   words = str(words)[0:19]
   ttyEcho("W" + words)
-
-def tagLookup(tag):
-  """Query the database for the tag ID"""
-  
