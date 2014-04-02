@@ -1,1 +1,2 @@
+#!/bin/bash
 avrdude -p m328p -c jtag3isp -B 0.5 -U flash:w:./.build/uno/firmware.elf
