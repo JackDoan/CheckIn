@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-import serial, os, time, datetime, datt, sqlite3
-
+import serial, os, time, datetime, libcheckin, sqlite3
+chn = libcheckin
 line = []
 
 
 loc = "D117"
 status = "Test"
-conn = sqlite3.connect("./datt.db")
+conn = sqlite3.connect("./chn.db")
 db = conn.cursor()
 db.execute("Select COUNT(*) from students")
 studentCount = str(db.fetchone()[0])
@@ -43,26 +43,26 @@ if noSerial == 0:
 	os.system("gpio write 40 0")
 	os.system("gpio write 41 0")
 	os.system("gpio write 4 1")
-	datt.beep()
+	chn.beep()
 	ip = os.popen("ifconfig wlan0 | grep inet | awk '{print $2}' | sed -e s/.:/*/").read()
-	datt.lcdClear()
-	datt.lcdRow(0)
-	datt.lcdWrite("IP Address:")
-	datt.lcdRow(1)                                                                   
-	datt.lcdWrite(ip[4:-1])
+	chn.lcdClear()
+	chn.lcdRow(0)
+	chn.lcdWrite("IP Address:")
+	chn.lcdRow(1)                                                                   
+	chn.lcdWrite(ip[4:-1])
 	os.system("sleep 3")
-	datt.lcdClear()
-	datt.lcdWrite("Checkin v0.1")
-	datt.lcdRow(1)
-	datt.lcdWrite("Doan Engineering")
+	chn.lcdClear()
+	chn.lcdWrite("Checkin v0.1")
+	chn.lcdRow(1)
+	chn.lcdWrite("Doan Engineering")
 
 while True:
 	if noSerial == 0:
 		for c in ser.read():
 			line.append(c)
 			if c == '\n':
-				datt.beep()
-				datt.lcdClear()
+				chn.beep()
+				chn.lcdClear()
 			if '\x03' in line:
 				line.remove('\x03')
 			if '\x02' in line:
@@ -94,13 +94,13 @@ while True:
 		fail = 1
 
 	if noSerial == 0:
-		datt.lcdClear()
-		datt.lcdRow(0)
+		chn.lcdClear()
+		chn.lcdRow(0)
 		if fail == 1:
-			datt.lcdWrite("ERROR")
+			chn.lcdWrite("ERROR")
 		else:  
-			datt.lcdWrite("Welcome to class")                                             
-		datt.lcdRow(1)
-		datt.lcdWrite(student)
+			chn.lcdWrite("Welcome to class")                                             
+		chn.lcdRow(1)
+		chn.lcdWrite(student)
 
 ser.close()
