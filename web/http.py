@@ -36,6 +36,8 @@ def login():
 def data():
 	conn = sqlite3.connect("../chn.db")
 	db = conn.cursor()
+	db.execute("Select * from config")
+	config = db.fetchall()
 	db.execute("Select rowid,* from records order by rowid desc")
 	t_records = db.fetchall()
 	records = map(list, t_records)
@@ -43,7 +45,10 @@ def data():
 	for r in records:
 		db.execute("Select name from students where rowid=?", (r[1],))
 		r[1] = str(db.fetchone()[0])
+		comptime = time.strftime('%H%M', time.localtime(r[3])
+		if comptime 
 		r[3] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(r[3]))
+
 	conn.close()
 	return render_template('data.html', records=records)
 
@@ -64,8 +69,10 @@ def test():
 	db = conn.cursor()
 	db.execute("Select * from students")
 	studentnames = db.fetchall()
+	db.execute("Select * from config")
+	conf = db.fetchall()
 	conn.close()
-	return render_template('test.html', studentnames=studentnames)
+	return render_template('test.html', studentnames=studentnames, conf=conf)
 
 if __name__ == '__main__':
 	app.debug = True

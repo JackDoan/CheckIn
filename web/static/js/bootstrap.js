@@ -4,6 +4,14 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
+/* =================================================
+ * CheckIn JS Addendum
+ * Jack Doan - 4/4/2014
+ * ================================================= */
+	signout = 'http://logout:password@' + document.location.host
+/* =========== END CheckIn JS Addendum ============== */
+
+
 if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript requires jQuery') }
 
 /* ========================================================================
