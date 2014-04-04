@@ -3,7 +3,7 @@
 	<head>
 		<title>CheckIn | Tags</title>
 		<meta name="viewport" content="width=device-width">
-		<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/static/bootstrap.css">
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 		<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 		<script type="text/javascript">
@@ -12,11 +12,6 @@
 			signout	= window.location.href.replace(p, p + 'logout:password@')
 			signout	= window.location.href.replace('/data', '')
 		</script>
-		<style>
-			body {
-			font-family: Droid Sans, Courier, monospace;
-				 }
-		</style>
 	</head>
 	
 	<body>
@@ -48,7 +43,7 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="page-header">
-					<h1 style="font-family: Droid Sans, Courier, monospace;">Student / Tag Management<small> Add, update, and remove students and tags.</small></h1>
+					<h1>Student / Tag Management<small> Add, update, and remove students and tags.</small></h1>
 				</div>
 			</div>
 		</div>
@@ -56,7 +51,7 @@
 		<div class="col-sm-8">
 			<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title" style="font-family: Droid Sans, Courier, monospace;">Student / Tag Relationships</h3>
+						<h3 class="panel-title">Student / Tag Relationships</h3>
 					</div>
 					<div class="panel-body">
 						<table class="table">
@@ -97,7 +92,7 @@
 			 <div class="col-sm-4">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title" style="font-family: Droid Sans, Courier, monospace;">Find a Student</h3>
+						<h3 class="panel-title">Find a Student</h3>
 					</div>
 					<div class="panel-body"><form action="/tags/search" method="get">
 						<div class="input-group">
