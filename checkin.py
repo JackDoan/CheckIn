@@ -6,6 +6,9 @@ linestr = ''
 fail = 0
 loc = "D117"
 status = "Test"
+delchars = ''.join(c for c in map(chr, range(256)) if not c.isalnum())
+
+
 conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 db = conn.cursor()
 db.execute("Select COUNT(*) from students")
@@ -23,16 +26,17 @@ try:
 		stopbits=serial.STOPBITS_ONE,\
 		bytesize=serial.EIGHTBITS,\
 		timeout=None)
+
 except serial.SerialException, e:
-  print("could not open serial port!!!")
-  noSerial = 1
-  class fakeser:
-	def read(self):
-	  return [0,0,0,0]
-	def close(self):
-	  pass
-  ser = fakeser()
-delchars = ''.join(c for c in map(chr, range(256)) if not c.isalnum())
+	print("could not open serial port!!!")
+	noSerial = 1
+	class fakeser:
+		def read(self):
+	  		return [0,0,0,0]
+		def close(self):
+			pass
+	ser = fakeser()
+
 if noSerial == 0:
 	os.system("gpio export 40")
 	os.system("gpio export 41")
@@ -70,6 +74,8 @@ while True:
 	print("Looking up ID " + linestr)
 	db.execute("select rowid,* from students where tag = ?", (linestr,))
 	result = db.fetchone()
+	linestr = ''
+
 	if result:
 		student = str(result[1])[0:15]
 		student_id = result[0]
@@ -83,7 +89,7 @@ while True:
 		print "No result"
 		student = "Tag not assigned!"
 		fail = 1
-	linestr = ''
+
 	if noSerial == 0:
 		chn.lcdClear()
 		chn.lcdRow(0)
