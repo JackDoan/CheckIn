@@ -1,10 +1,9 @@
 #!/bin/sh
 # chkconfig: 45 99 99
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/bin/python
+DAEMON=/usr/local/CheckIn/web/http.py
 NAME=CheckIn-Web
 DESC="CheckIn Web Service"
-OPTS="/usr/local/CheckIn/web/http.py"
 PIDFILE=/var/run/$NAME.pid
 . /lib/lsb/init-functions
 
@@ -12,7 +11,7 @@ PIDFILE=/var/run/$NAME.pid
 case "$1" in
   start)
 	echo -n "Starting $DESC: "
-	start-stop-daemon --start --background -x "$DAEMON" -- $OPTS
+	start-stop-daemon --start --background -x "$DAEMON"
 	echo "$NAME."
 	;;
   stop)
@@ -24,7 +23,7 @@ case "$1" in
 	echo -n "Restarting $DESC: "
 	start-stop-daemon --stop -x "$DAEMON"
 	sleep 1
-	start-stop-daemon --start --background -x "$DAEMON" -- $OPTS
+	start-stop-daemon --start --background -x "$DAEMON"
 	echo "$NAME."
 	;;
   *)
