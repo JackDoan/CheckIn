@@ -38,15 +38,6 @@ except serial.SerialException, e:
 	ser = fakeser()
 
 if noSerial == 0:
-	os.system("gpio export 40")
-	os.system("gpio export 41")
-	os.system("gpio export 4")
-	os.system("gpio dir 40 out")
-	os.system("gpio dir 41 out")
-	os.system("gpio dir 4 out")
-	os.system("gpio write 40 0")
-	os.system("gpio write 41 0")
-	os.system("gpio write 4 1")
 	chn.beep()
 	ip = os.popen("ifconfig wlan0 | grep inet | awk '{print $2}' | sed -e s/....://").read()
 	chn.lcdClear()
