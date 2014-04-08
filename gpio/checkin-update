@@ -1,3 +1,0 @@
-rm /usr/local/bin/checkin
-rm -rf /usr/local/checkin
-opkg install http://jackdoan.com/CheckIn/checkin.opk
