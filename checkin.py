@@ -45,7 +45,7 @@ if noSerial == 0:
 	chn.lcdWrite("IP Address:")
 	chn.lcdRow(1)
 	chn.lcdWrite(str.strip(ip))
-	os.system("sleep 2")
+	os.system("sleep 3")
 	chn.lcdClear()
 	chn.lcdWrite("Checkin v0.1")
 	chn.lcdRow(1)
