@@ -61,18 +61,49 @@ def tags():
 	t_students = db.fetchall()
 	students = map(list, t_students)
 	conn.close()
-	return render_template('tags.html', students=students)
+	newid = students[-1][0]+1
+	return render_template('tags.html', students=students, newid=newid)
 
-@app.route('/test')
-def test():
+@app.route('/tags/add')
+@requires_auth
+def tagsadd():
 	conn = sqlite3.connect("../chn.db")
 	db = conn.cursor()
-	db.execute("Select * from students")
-	studentnames = db.fetchall()
-	db.execute("Select * from config")
-	conf = db.fetchall()
+	db.execute("Select rowid,* from students")
+	t_students = db.fetchall()
+	students = map(list, t_students)
+	newstudent = request.args.getlist('name')[0]
+	newtag = request.args.getlist('tag')[0]
+	newid = students[-1][0]+1
+	db.execute("INSERT INTO `students` (`name`, `tag`) VALUES (?, ?);", (newstudent, newtag,))
+	students.append([newid, newstudent, newtag])
+	conn.commit()
+	newid = students[-1][0]+1 #needed to increment on screen!
+	if request.args.getlist('crash'):
+			raise
+			return "oh shit"
 	conn.close()
-	return render_template('test.html', studentnames=studentnames, conf=conf)
+	return render_template('tags.html', students=students, newid=newid, query_ok=1, printstatus=1, newstudent=newstudent, newtag=newtag)
+
+
+@app.route('/tags/delete', methods=['GET', 'POST'])
+def tagsdel():
+	conn = sqlite3.connect("../chn.db")
+	delid = request.args.getlist('delid')[0]
+	db = conn.cursor()
+	db.execute("DELETE FROM `records` WHERE `student_id`=?;", (delid,))
+	db.execute("DELETE FROM `students` WHERE `rowid`=?;", (delid,))
+	db.execute("Select rowid,* from students")
+	students = db.fetchall()
+	conn.commit()
+	conn.close()
+	newid = students[-1][0]+1
+	return render_template('tags.html', newid=newid, students=students)
+
+@app.route('/debug', methods=['GET', 'POST'])
+def le_debug():
+	raise
+	return 'Ohnoes'
 
 if __name__ == '__main__':
 	app.debug = True

@@ -25,6 +25,12 @@ case "$1" in
 	;;
   stop)
 	echo -n "Stopping $DESC: "
+	echo CLEAR > /dev/ttyS0
+	echo BEEP > /dev/ttyS0
+	echo BEEP > /dev/ttyS0
+	echo WShutting down... > /dev/ttyS0
+	sleep 2 
+	echo CLEAR > /dev/ttyS0
 	echo -n 4 > /sys/class/gpio/unexport
 	echo -n 40 > /sys/class/gpio/unexport
 	echo -n 41 > /sys/class/gpio/unexport

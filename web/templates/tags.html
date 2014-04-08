@@ -43,6 +43,12 @@
 		</div>
 		<div class="row">
 		<div class="col-sm-8">
+			{% if printstatus==1 %}
+				{% if query_ok==1 %}
+					<div class="alert alert-success">{{ newstudent }} has been added with ID #{{ newid }} and tag ID {{ newtag }}</div>
+				{% endif %}
+				{% if query_ok==0 %}<div class="alert alert-danger">Something bad happened! Tag not added.</div>{% endif %}
+			{% endif %}
 			<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">Student / Tag Relationships</h3>
@@ -63,17 +69,16 @@
 									<td>{% print(s[0]) %}</td>
 									<td>{% print(s[1]) %}</td>
 									<td>{% print(s[2]) %}</td>	 
-									<td>
-									<div class="btn-group btn-group-xs">
-										<a href="/tags/edit/{% print(s[1]) %}" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
-										<a href="/tags/delete/{% print(s[1]) %}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+									<td><div class="btn-group btn-group-xs">
+										<a href="/tags/edit/{% print(s[0]) %}" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
+										<a href="/tags/delete?delid={% print(s[0]) %}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
 										</div>
 									</td>
 								</tr>
 								{% endfor %} 
 								<tr>
-								<div class="input-group input-group-sm"><form action="/tags/add">
-								<td><input type="text" class="form-control" placeholder="New Student ID" name="id"></td>
+								<div class="input-group input-group-sm"><form action="/tags/add" method="get">
+								<td><input type="text" id="disabledInput" class="form-control" value="New ID: {{ newid }}" disabled></td>
 								<td><input type="text" class="form-control" placeholder="New Name" name="name"></td>
 								<td><input type="text" class="form-control" placeholder="Scan New Tag Here" name="tag"></td>
 								<td><button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button></td>
