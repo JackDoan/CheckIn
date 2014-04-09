@@ -64,18 +64,19 @@
 								</tr>
 							</thead>
 							<tbody>
+								{% autoescape false %}
 								{% for s in students %}
 								<tr>
-									<td>{% print(s[0]) %}</td>
-									<td>{% print(s[1]) %}</td>
-									<td>{% print(s[2]) %}</td>	 
-									<td><div class="btn-group btn-group-xs">
-										<a href="/tags/edit/{% print(s[0]) %}" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
+									<td class="row-{{ s[0] }} id">{% print(s[0]) %}</td>
+									<td class="row-{{ s[0] }} name">{% print(s[1]) %}</td>
+									<td class="row-{{ s[0] }} tag">{% print(s[2]) %}</td>	 
+									<td class="row-{{ s[0] }} buttons"><div class="btn-group btn-group-xs">
+										<a onClick='editModal($(".row-{{ s[0] }}.id").text(), $(".row-{{ s[0] }}.name").text(), $(".row-{{ s[0] }}.tag").text());'  class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
 										<a href="/tags/delete?delid={% print(s[0]) %}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
-										</div>
-									</td>
+									</div></td>
 								</tr>
 								{% endfor %} 
+								{% endautoescape %}
 								<tr>
 								<div class="input-group input-group-sm"><form action="/tags/add" method="get">
 								<td><input type="text" id="disabledInput" class="form-control" value="New ID: {{ newid }}" disabled></td>
@@ -111,9 +112,47 @@
 				</div>
 			</div>
 		</div>
-		<div class="row"><div class="col-sm-12">
-			<div class="well well-sm"><b>&copy; 2014 Doan Engineering</b></div>
-		</div></div>
+		<div class="row"><div class="col-sm-12"><div class="well well-sm"><b>&copy; 2014 Doan Engineering</b></div></div></div>
 	</div></div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="myModalLabel">Edit Student</h4>
+	  </div>
+	  <div class="modal-body">
+		<form class="form-horizontal" method="get" action="/tags/edit">
+	<div class="form-group">
+        <label class="control-label col-md-4" for="modal_id">Student ID #</label>
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="modal_id" name="id" value="" disabled/>
+        </div>
+    </div>
+	<div class="form-group">
+		<label class="control-label col-md-4" for="modal_name">Student Name</label>
+		<div class="col-md-6">
+			<input type="hidden" id="modal_name" name="name" value=""/>
+			<input type="text" class="form-control" id="modal_name_show" value="" disabled/>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-md-4" for="modal_tag">Tag #</label>
+		<div class="col-md-6">
+			<input type="text" class="form-control" id="modal_tag" name="tag" value=""/>
+		</div>
+	</div>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="submit" class="btn btn-primary">Save changes</button>
+	  </div>
+	</form>
+	</div>
+  </div>
+</div>
 	</body>
 </html>

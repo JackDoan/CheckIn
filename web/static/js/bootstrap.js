@@ -8,6 +8,22 @@
  * CheckIn JS Addendum
  * Jack Doan - 4/4/2014
  * ================================================= */
+	function editModal(id, name, tag)
+	{
+	$('#modal_id').attr('value', id);
+	$('#modal_name_show').attr('value', name);
+	$('#modal_name').attr('value', name);
+	$('#modal_tag').attr('value', tag);
+	$('#myModal').modal();
+	}
+	function makeEditable(rowid, row, name, tag, buttons) 
+	{
+//		$( row ).wrap("<div class='input-group input-group-sm'></div>");
+		$( name ).wrapInner(function() { return "<input type=\"text\" class=\"" + rowid + " name form-control\" value='" + $( name ).text() + "' />";  });
+		$( tag ).wrapInner(function() { return "<input type=\"text\" class=\"" + rowid + " tag form-control rowid tag\" value='" + $( tag ).text() + "' />";  });
+		$( buttons ).html(function() { return "<a href='/tags/edit?name=" + $("." + rowid + ".name").val()  + "' class='form-control btn-success'><span class='glyphicon glyphicon-check'></span></a>"; });
+		return 1
+	}
 	signout = 'http://logout:password@' + document.location.host
 /* =========== END CheckIn JS Addendum ============== */
 

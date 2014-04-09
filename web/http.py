@@ -100,6 +100,20 @@ def tagsdel():
 	newid = students[-1][0]+1
 	return render_template('tags.html', newid=newid, students=students)
 
+@app.route('/tags/edit', methods=['GET', 'POST'])
+def tagsedit():
+	conn = sqlite3.connect("../chn.db")
+	name = request.args.getlist('name')[0]
+	tag = request.args.getlist('tag')[0]
+	db = conn.cursor()
+	db.execute("Update `students` set `tag`=? WHERE `name`=?;", (tag, name,))
+	db.execute("Select rowid,* from students")
+	students = db.fetchall()
+	conn.commit()
+	conn.close()
+	newid = students[-1][0]+1
+	return render_template('tags.html', newid=newid, students=students)
+
 @app.route('/debug', methods=['GET', 'POST'])
 def le_debug():
 	raise
