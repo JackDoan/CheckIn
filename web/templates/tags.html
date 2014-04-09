@@ -43,12 +43,6 @@
 		</div>
 		<div class="row">
 		<div class="col-sm-8">
-			{% if printstatus==1 %}
-				{% if query_ok==1 %}
-					<div class="alert alert-success">{{ newstudent }} has been added with ID #{{ newid }} and tag ID {{ newtag }}</div>
-				{% endif %}
-				{% if query_ok==0 %}<div class="alert alert-danger">Something bad happened! Tag not added.</div>{% endif %}
-			{% endif %}
 			<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">Student / Tag Relationships</h3>
@@ -64,7 +58,6 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% autoescape false %}
 								{% for s in students %}
 								<tr>
 									<td class="row-{{ s[0] }} id">{% print(s[0]) %}</td>
@@ -76,7 +69,6 @@
 									</div></td>
 								</tr>
 								{% endfor %} 
-								{% endautoescape %}
 								<tr>
 								<div class="input-group input-group-sm"><form action="/tags/add" method="get">
 								<td><input type="text" id="disabledInput" class="form-control" value="New ID: {{ newid }}" disabled></td>

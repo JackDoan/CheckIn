@@ -36,8 +36,6 @@ def login():
 def data():
 	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
-	#db.execute("Select * from config")
-	#config = db.fetchall()
 	db.execute("Select rowid,* from records order by rowid desc")
 	t_records = db.fetchall()
 	records = map(list, t_records)
@@ -45,17 +43,53 @@ def data():
 	for r in records:
 		db.execute("Select name from students where rowid=?", (r[1],))
 		r[1] = str(db.fetchone()[0])
-		#comptime = time.strftime('%H%M', time.localtime(r[3])
-		#if comptime 
 		r[3] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(r[3]))
 
 	conn.close()
 	return render_template('data.html', records=records)
 
+@app.route('/student/<student>')
+@requires_auth
+def studentPage(student):
+	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
+	db = conn.cursor()
+	db.execute("Select rowid,* from students where `name`=?", (student,))
+	result = db.fetchall()
+	if result:
+		tag = result[0][2]
+		student_id = result[0][0]
+	else:
+		conn.close()
+		tags()
+	db.execute("Select rowid,* from records where `student_id`=? order by rowid desc", (student_id,))
+	t_records = db.fetchall()
+	records = map(list, t_records)
+	i = 0
+	for r in records:
+		#comptime = time.strftime('%H%M', time.localtime(r[3])
+		#if comptime 
+		r[3] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(r[3]))
+
+	conn.close()
+	return render_template('student.html', records=records, student_id = student_id, tag=tag, name=student)
+
+@app.route('/student/<student>/edit')
+@requires_auth
+def studentEdit(student):
+	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
+	db = conn.cursor()
+	if request.args.getlist('tag'):
+		name = student
+		tag = request.args.getlist('tag')[0]
+		db.execute("Update `students` set `tag`=? WHERE `name`=?;", (tag, name,))
+	conn.commit()
+	return studentPage(student)	
+
+
 @app.route('/tags')
 @requires_auth
 def tags():
-	conn = sqlite3.connect("../chn.db")
+	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
 	db.execute("Select rowid,* from students")
 	t_students = db.fetchall()
@@ -67,32 +101,34 @@ def tags():
 @app.route('/tags/add')
 @requires_auth
 def tagsadd():
-	conn = sqlite3.connect("../chn.db")
+	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
 	db.execute("Select rowid,* from students")
 	t_students = db.fetchall()
 	students = map(list, t_students)
-	newstudent = request.args.getlist('name')[0]
-	newtag = request.args.getlist('tag')[0]
 	newid = students[-1][0]+1
-	db.execute("INSERT INTO `students` (`name`, `tag`) VALUES (?, ?);", (newstudent, newtag,))
-	students.append([newid, newstudent, newtag])
-	conn.commit()
-	newid = students[-1][0]+1 #needed to increment on screen!
-	if request.args.getlist('crash'):
-			raise
-			return "oh shit"
-	conn.close()
-	return render_template('tags.html', students=students, newid=newid, query_ok=1, printstatus=1, newstudent=newstudent, newtag=newtag)
+	if request.args.getlist('name') and request.args.getlist('tag'):
+		newstudent = request.args.getlist('name')[0]
+		newtag = request.args.getlist('tag')[0]
+		db.execute("INSERT INTO `students` (`name`, `tag`) VALUES (?, ?);", (newstudent, newtag,))
+		students.append([newid, newstudent, newtag])
+		conn.commit()
+		newid = students[-1][0]+1 #needed to increment on screen!
+		conn.close()
+		return render_template('tags.html', students=students, newid=newid)
+	else:
+		conn.close()
+		return render_template('tags.html', students=students, newid=newid)
 
 
 @app.route('/tags/delete', methods=['GET', 'POST'])
 def tagsdel():
-	conn = sqlite3.connect("../chn.db")
-	delid = request.args.getlist('delid')[0]
+	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
-	db.execute("DELETE FROM `records` WHERE `student_id`=?;", (delid,))
-	db.execute("DELETE FROM `students` WHERE `rowid`=?;", (delid,))
+	if request.args.getlist('delid'):
+		delid = request.args.getlist('delid')[0]
+		db.execute("DELETE FROM `records` WHERE `student_id`=?;", (delid,))
+		db.execute("DELETE FROM `students` WHERE `rowid`=?;", (delid,))
 	db.execute("Select rowid,* from students")
 	students = db.fetchall()
 	conn.commit()
@@ -102,11 +138,12 @@ def tagsdel():
 
 @app.route('/tags/edit', methods=['GET', 'POST'])
 def tagsedit():
-	conn = sqlite3.connect("../chn.db")
-	name = request.args.getlist('name')[0]
-	tag = request.args.getlist('tag')[0]
+	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
-	db.execute("Update `students` set `tag`=? WHERE `name`=?;", (tag, name,))
+	if request.args.getlist('name') and request.args.getlist('tag'):
+		name = request.args.getlist('name')[0]
+		tag = request.args.getlist('tag')[0]
+		db.execute("Update `students` set `tag`=? WHERE `name`=?;", (tag, name,))
 	db.execute("Select rowid,* from students")
 	students = db.fetchall()
 	conn.commit()
