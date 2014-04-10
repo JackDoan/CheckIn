@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+	<head>
+		<title>{% block title %}{% endblock %} | CheckIn</title>
+		<meta name="viewport" content="width=device-width">
+		<link rel="stylesheet" href="/static/bootstrap.css">
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+		{% block head %}{% endblock %}
+	</head>
+<body>
+		<div class="navbar navbar-inverse" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">CheckIn</a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li class="{% block active_home %}{% endblock %}"> <a href="#">Home</a> </li>
+						<li class="{% block active_status %}{% endblock %}"> <a href="/status">Status</a> </li>
+						<li class="{% block active_data %}{% endblock %}"> <a href="/data">Data</a> </li>
+						<li class="{% block active_tags %}{% endblock %}"> <a href="/tags">Tags</a> </li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a onClick="window.location = signout">Sign Out</a></li>
+					</ul>
+				</div>
+				<!-- /.nav-collapse -->
+			</div>
+			<!-- /.container -->
+		</div>
+		<!-- /.navbar -->
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="page-header">
+						<h1>{% block big_header %}{% endblock %}<small> {% block little_header %}{% endblock %}</small></h1>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				{% block body %}{% endblock %}	
+			</div>
+			<div class="row"><div class="col-sm-12"><div class="well well-sm"><b>&copy; 2014 Doan Engineering</b></div></div></div>
+		</div>
+	</body>
+</html>

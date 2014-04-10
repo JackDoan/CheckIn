@@ -1,9 +1,47 @@
-{% extends "base.html" %}
-    {% block title %}Tags{% endblock %}
-    {% block active_tags %}active{% endblock %}
-    {% block big_header %}Student / Tag Management{% endblock %}
-    {% block little_header %}Add, update, and remove students and tags.{% endblock %}
-    {% block body %}
+<!doctype html>
+<html>
+	<head>
+		<title>CheckIn | Tags</title>
+		<meta name="viewport" content="width=device-width">
+		<link rel="stylesheet" href="/static/bootstrap.css">
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+	</head>
+	
+	<body>
+		<div class="navbar navbar-inverse" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">CheckIn</a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li> <a href="#">Home</a> </li>
+						<li> <a href="/status">Status</a> </li>
+						<li> <a href="/data">Data</a> </li>
+						<li class="active"> <a href="/tags">Tags</a> </li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+					<li><a onClick="window.location = signout">Sign Out</a></li>
+					</ul>
+				</div>
+				<!-- /.nav-collapse -->
+			</div>
+			<!-- /.container -->
+		</div>
+		<!-- /.navbar -->
+		<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="page-header">
+					<h1>Student / Tag Management<small> Add, update, and remove students and tags.</small></h1>
+				</div>
+			</div>
+		</div>
+		<div class="row">
 		<div class="col-sm-8">
 			<div class="panel panel-default">
 					<div class="panel-heading">
@@ -65,6 +103,11 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		<div class="row"><div class="col-sm-12"><div class="well well-sm"><b>&copy; 2014 Doan Engineering</b></div></div></div>
+	</div></div>
+
+
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -103,4 +146,5 @@
 	</div>
   </div>
 </div>
-{% endblock %}
+	</body>
+</html>
