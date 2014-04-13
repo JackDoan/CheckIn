@@ -7,10 +7,25 @@ fail = 0
 loc = "D117"
 status = "Test"
 delchars = ''.join(c for c in map(chr, range(256)) if not c.isalnum())
-
-
+print("Loading configuration from the database...")
 conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 db = conn.cursor()
+db.execute("Select * from config;")
+config = db.fetchall()
+classblocks = []
+for pair in config:
+	if pair[0] == "class_blocks":
+		blocks = str(pair[1]).split()
+		for block in blocks:
+			block_start = block + "_start"
+			block_end = block + "_end"
+			for each in config:
+				if each[0] == block_start:
+					block_start_time = each[1]
+				if each[0] == block_end:
+					block_end_time = each[1]
+			classblocks.append([block, block_start_time, block_end_time])
+print(classblocks)
 db.execute("Select COUNT(*) from students")
 studentCount = str(db.fetchone()[0])
 welcomemsg = "Loaded database with " + studentCount + " students"
