@@ -13,17 +13,22 @@ void setup()
 	digitalWrite(8, HIGH);
 	lcd.begin(16, 2);
 	lcd.print("Initializing...");
-	tone(10, 1500, 400);
+	tone(10, 900, 200);
 }
 
 void loop() 
 {
 if (stringComplete) {
 	if (cmdData.startsWith("BEEP")) {
-		tone(10, 2500, 400);
+		tone(10, 900, 300);
 		cmdData = NULL;
 		stringComplete = false;
 	}
+	if (cmdData.startsWith("SADBEEP")) {
+        tone(10, 400, 300);
+        cmdData = NULL;
+        stringComplete = false;
+    }
 	if (cmdData.startsWith("ROW0")) {
 		lcd.setCursor(0, 0);
 		stringComplete = false;

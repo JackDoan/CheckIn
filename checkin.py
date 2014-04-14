@@ -101,6 +101,7 @@ while True:
 		chn.lcdRow(0)
 		if fail == 1:
 			chn.lcdWrite("ERROR")
+			chn.ttyEcho("SADBEEP")
 		else:  
 			chn.lcdWrite("Welcome to class")											 
 		chn.lcdRow(1)
