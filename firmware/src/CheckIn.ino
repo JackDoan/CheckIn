@@ -13,7 +13,7 @@ void setup()
 	digitalWrite(8, HIGH);
 	lcd.begin(16, 2);
 	lcd.print("Initializing...");
-	tone(10, 900, 200);
+	tone(10, 1600, 200);
 }
 
 void loop() 
