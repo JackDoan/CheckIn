@@ -39,13 +39,68 @@ def data():
 	db.execute("Select rowid,* from records order by rowid desc")
 	t_records = db.fetchall()
 	records = map(list, t_records)
-	i = 0
+	db.execute("Select * from config;")
+	config = db.fetchall()
+	classblocks = []
+	for pair in config:
+		if pair[0] == "class_blocks":
+			blocks = str(pair[1]).split()
+			for block in blocks:
+				block_start = block + "_start"
+				block_end = block + "_end"
+				for each in config:
+					if each[0] == block_start:
+						block_start_time = each[1]
+					if each[0] == block_end:
+						block_end_time = each[1]
+				classblocks.append([block, int(block_start_time), int(block_end_time)])
 	for r in records:
 		db.execute("Select name from students where rowid=?", (r[1],))
 		r[1] = str(db.fetchone()[0])
-		r[3] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(r[3]))
-
+		btngreen = '<button type="button" class="btn btn-success btn-xs">'
+		btnyellow = '<button type="button" class="btn btn-warning btn-xs">'
+		classtime = int(time.strftime('%H%M', time.localtime(r[3]))) #- 594 #300 subtracted to make this test data interesting
+		if classtime > classblocks[0][1] - 8 and classtime < classblocks[0][1]: #TODO: -8 accounts for 1st grace period
+			r[4] = btngreen + 'Present for ' + classblocks[0][0]
+		elif classtime > classblocks[0][2] and classtime < classblocks[1][1]:
+			r[4] = btngreen + 'Present for ' + classblocks[1][0]
+		elif classtime > classblocks[1][2] and classtime < classblocks[2][1]:
+			r[4] = btngreen + 'Present for ' + classblocks[2][0]
+		elif classtime > classblocks[2][2] and classtime < classblocks[3][1]:
+			r[4] = btngreen + 'Present for ' + classblocks[3][0]
+		elif classtime > classblocks[3][2] and classtime < classblocks[4][1]:
+			r[4] = btngreen + 'Present for ' + classblocks[4][0]
+		elif classtime > classblocks[0][1] and classtime < classblocks[0][2]:
+			tardyby = str(classtime - classblocks[0][1])
+			tardyby = '{:0>4}'.format(tardyby)
+			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
+			r[4] = btnyellow + 'Tardy for ' + classblocks[0][0] + ' by ' + tardyby
+		elif classtime > classblocks[1][1] and classtime < classblocks[1][2]:
+			tardyby = str(classtime - classblocks[1][1])
+			tardyby = '{:0>4}'.format(tardyby)
+			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
+			r[4] = btnyellow + 'Tardy for ' + classblocks[1][0] + ' by ' + tardyby
+		elif classtime > classblocks[2][1] and classtime < classblocks[2][2]:
+			tardyby = str(classtime - classblocks[2][1])
+			tardyby = '{:0>4}'.format(tardyby)
+			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]	
+			r[4] = btnyellow + 'Tardy for ' + classblocks[2][0] + ' by ' + tardyby
+		elif classtime > classblocks[3][1] and classtime < classblocks[3][2]:
+			tardyby = str(classtime - classblocks[3][1])
+			tardyby = '{:0>4}'.format(tardyby)
+			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
+			r[4] = btnyellow + 'Tardy for ' + classblocks[3][0] + ' by ' + tardyby
+		elif classtime > classblocks[4][1] and classtime < classblocks[4][2]:
+			tardyby = str(classtime - classblocks[4][1])
+			tardyby = '{:0>4}'.format(tardyby)
+			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
+			r[4] = btnyellow + 'Tardy for ' + classblocks[4][0] + ' by ' + tardyby
+		else:
+			r[4] = '<button type="button" class="btn btn-primary btn-xs">' + r[4] + ' ' + str(classtime)
+		print(classtime)
+		r[3] = time.strftime('%I:%M:%S on %m/%d', time.localtime(r[3])) #%I is 12 hour clock
 	conn.close()
+	print(classblocks)
 	return render_template('data.html', records=records)
 
 @app.route('/student/<student>')

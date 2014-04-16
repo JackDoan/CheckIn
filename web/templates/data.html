@@ -27,7 +27,7 @@
 									<td>{% print(r[2]) %}</td>
 									<td>{% print(r[3]) %}</td>
 									<td>		
-										<button type="button" class="btn btn-warning btn-xs">{% print(r[4]) %}</button>
+										{% print(r[4]|safe) %}</button>
 									</td>	 
 									<td>{% print(r[1]) %}</td>
 								</tr>
