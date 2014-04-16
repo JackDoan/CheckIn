@@ -74,27 +74,27 @@ def data():
 			tardyby = str(classtime - classblocks[0][1])
 			tardyby = '{:0>4}'.format(tardyby)
 			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
-			r[4] = btnyellow + 'Tardy for ' + classblocks[0][0] + ' by ' + tardyby
+			r[4] = btnyellow + 'Tardy for ' + classblocks[0][0]# + ' by ' + tardyby
 		elif classtime > classblocks[1][1] and classtime < classblocks[1][2]:
 			tardyby = str(classtime - classblocks[1][1])
 			tardyby = '{:0>4}'.format(tardyby)
 			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
-			r[4] = btnyellow + 'Tardy for ' + classblocks[1][0] + ' by ' + tardyby
+			r[4] = btnyellow + 'Tardy for ' + classblocks[1][0]# + ' by ' + tardyby
 		elif classtime > classblocks[2][1] and classtime < classblocks[2][2]:
 			tardyby = str(classtime - classblocks[2][1])
 			tardyby = '{:0>4}'.format(tardyby)
 			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]	
-			r[4] = btnyellow + 'Tardy for ' + classblocks[2][0] + ' by ' + tardyby
+			r[4] = btnyellow + 'Tardy for ' + classblocks[2][0]# + ' by ' + tardyby
 		elif classtime > classblocks[3][1] and classtime < classblocks[3][2]:
 			tardyby = str(classtime - classblocks[3][1])
 			tardyby = '{:0>4}'.format(tardyby)
 			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
-			r[4] = btnyellow + 'Tardy for ' + classblocks[3][0] + ' by ' + tardyby
+			r[4] = btnyellow + 'Tardy for ' + classblocks[3][0]# + ' by ' + tardyby
 		elif classtime > classblocks[4][1] and classtime < classblocks[4][2]:
 			tardyby = str(classtime - classblocks[4][1])
 			tardyby = '{:0>4}'.format(tardyby)
 			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
-			r[4] = btnyellow + 'Tardy for ' + classblocks[4][0] + ' by ' + tardyby
+			r[4] = btnyellow + 'Tardy for ' + classblocks[4][0]# + ' by ' + tardyby
 		else:
 			r[4] = '<button type="button" class="btn btn-primary btn-xs">' + r[4] + ' ' + str(classtime)
 		print(classtime)
