@@ -1,6 +1,10 @@
 #!/usr/bin/env python
-import serial, os, time, datetime, libcheckin, sqlite3
+import serial, os, time, datetime, ntplib, libcheckin, sqlite3
 chn = libcheckin
+ntp = ntplib.NTPClient()
+response = ntp.request('pool.ntp.org')
+os.system('date -s @' + str(response.tx_time))
+print time.localtime(response.tx_time)
 line = ''
 linestr = ''
 fail = 0

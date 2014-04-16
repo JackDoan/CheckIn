@@ -34,7 +34,7 @@ case "$1" in
 	echo -n 4 > /sys/class/gpio/unexport
 	echo -n 40 > /sys/class/gpio/unexport
 	echo -n 41 > /sys/class/gpio/unexport
-	start-stop-daemon --stop -x "$DAEMON"
+	start-stop-daemon --stop --pidfile $PIDFILE --retry 10
 	echo "$NAME."
 	;;
   restart|force-reload)

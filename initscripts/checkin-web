@@ -16,7 +16,7 @@ case "$1" in
 	;;
   stop)
 	echo -n "Stopping $DESC: "
-	start-stop-daemon --stop -x "$DAEMON"
+	start-stop-daemon --stop --pidfile $PIDFILE --retry 10
 	echo "$NAME."
 	;;
   restart|force-reload)
