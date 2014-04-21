@@ -54,53 +54,59 @@ def data():
 					if each[0] == block_end:
 						block_end_time = each[1]
 				classblocks.append([block, int(block_start_time), int(block_end_time)])
-	for r in records:
+	for r in records[:]:
 		db.execute("Select name from students where rowid=?", (r[1],))
 		r[1] = str(db.fetchone()[0])
+		btnblue = '<button type="button" class="btn btn-primary btn-xs">'
 		btngreen = '<button type="button" class="btn btn-success btn-xs">'
 		btnyellow = '<button type="button" class="btn btn-warning btn-xs">'
-		classtime = int(time.strftime('%H%M', time.localtime(r[3]))) #- 594 #300 subtracted to make this test data interesting
-		if classtime > classblocks[0][1] - 8 and classtime < classblocks[0][1]: #TODO: -8 accounts for 1st grace period
-			r[4] = btngreen + 'Present for ' + classblocks[0][0]
-		elif classtime > classblocks[0][2] and classtime < classblocks[1][1]:
-			r[4] = btngreen + 'Present for ' + classblocks[1][0]
-		elif classtime > classblocks[1][2] and classtime < classblocks[2][1]:
-			r[4] = btngreen + 'Present for ' + classblocks[2][0]
-		elif classtime > classblocks[2][2] and classtime < classblocks[3][1]:
-			r[4] = btngreen + 'Present for ' + classblocks[3][0]
-		elif classtime > classblocks[3][2] and classtime < classblocks[4][1]:
-			r[4] = btngreen + 'Present for ' + classblocks[4][0]
-		elif classtime > classblocks[0][1] and classtime < classblocks[0][2]:
-			tardyby = str(classtime - classblocks[0][1])
-			tardyby = '{:0>4}'.format(tardyby)
-			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
-			r[4] = btnyellow + 'Tardy for ' + classblocks[0][0]# + ' by ' + tardyby
-		elif classtime > classblocks[1][1] and classtime < classblocks[1][2]:
-			tardyby = str(classtime - classblocks[1][1])
-			tardyby = '{:0>4}'.format(tardyby)
-			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
-			r[4] = btnyellow + 'Tardy for ' + classblocks[1][0]# + ' by ' + tardyby
-		elif classtime > classblocks[2][1] and classtime < classblocks[2][2]:
-			tardyby = str(classtime - classblocks[2][1])
-			tardyby = '{:0>4}'.format(tardyby)
-			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]	
-			r[4] = btnyellow + 'Tardy for ' + classblocks[2][0]# + ' by ' + tardyby
-		elif classtime > classblocks[3][1] and classtime < classblocks[3][2]:
-			tardyby = str(classtime - classblocks[3][1])
-			tardyby = '{:0>4}'.format(tardyby)
-			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
-			r[4] = btnyellow + 'Tardy for ' + classblocks[3][0]# + ' by ' + tardyby
-		elif classtime > classblocks[4][1] and classtime < classblocks[4][2]:
-			tardyby = str(classtime - classblocks[4][1])
-			tardyby = '{:0>4}'.format(tardyby)
-			tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
-			r[4] = btnyellow + 'Tardy for ' + classblocks[4][0]# + ' by ' + tardyby
+		if r[4] == "Test":
+			classtime = int(time.strftime('%H%M', time.localtime(r[3]))) 
+			if classtime > int(classblocks[0][1] - 48) and classtime < classblocks[0][1]: #TODO: -8 accounts for 1st grace period
+				status = "Present for " + classblocks[0][0]
+			elif classtime > classblocks[0][2] and classtime < classblocks[1][1]:
+				status = "Present for " + classblocks[1][0]
+			elif classtime > classblocks[1][2] and classtime < classblocks[2][1]:
+				status = "Present for " + classblocks[2][0]
+			elif classtime > classblocks[2][2] and classtime < classblocks[3][1]:
+				status = "Present for " + classblocks[3][0]
+			elif classtime > classblocks[3][2] and classtime < classblocks[4][1]:
+				status = "Present for " + classblocks[4][0]
+			elif classtime > classblocks[0][1] and classtime < classblocks[0][2]:
+			#	tardyby = str(classtime - classblocks[0][1])
+			#	tardyby = '{:0>4}'.format(tardyby)				####TODO? add tardyby times
+			#	tardyby = tardyby[0] + tardyby[1] + ':' + tardyby[2] + tardyby[3]
+				status = 'Tardy for ' + classblocks[0][0]
+			elif classtime > classblocks[1][1] and classtime < classblocks[1][2]:
+				status = 'Tardy for ' + classblocks[1][0]
+			elif classtime > classblocks[2][1] and classtime < classblocks[2][2]:
+				status = 'Tardy for ' + classblocks[2][0]
+			elif classtime > classblocks[3][1] and classtime < classblocks[3][2]:
+				status = 'Tardy for ' + classblocks[3][0]
+			elif classtime > classblocks[4][1] and classtime < classblocks[4][2]:
+				status = 'Tardy for ' + classblocks[4][0]
+			else:
+				status = 'OOB: record at ' + str(classtime)
+
+			db.execute('update records set status=? where rowid=?', (status, r[0]))
+			if status[0] == 'T':
+				r[4] = btnyellow + status
+			elif status[0] == 'P':
+				r[4] = btngreen + status
+			else:
+				r[4] = btnblue + status
 		else:
-			r[4] = '<button type="button" class="btn btn-primary btn-xs">' + r[4] + ' ' + str(classtime)
-		print(classtime)
+			#	records.remove(r)	removes OOB errors from display -- commented out for testing.
+			if r[4][0] == 'T':
+				r[4] = btnyellow + r[4]
+			elif r[4][0] == 'P':
+				r[4] = btngreen + r[4]
+			elif r[4][0] == 'O':
+				r[4] = btnblue + r[4]
+
 		r[3] = time.strftime('%I:%M:%S on %m/%d', time.localtime(r[3])) #%I is 12 hour clock
+	conn.commit()
 	conn.close()
-	print(classblocks)
 	return render_template('data.html', records=records)
 
 @app.route('/student/<student>')
