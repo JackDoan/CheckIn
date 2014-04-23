@@ -16,6 +16,7 @@
 									<th>Student ID</th>
 									<th>Name</th>
 									<th>Tag</th>
+									<th>Details</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -24,7 +25,9 @@
 								<tr>
 									<td class="row-{{ s[0] }} id">{% print(s[0]) %}</td>
 									<td class="row-{{ s[0] }} name">{% print(s[1]) %}</td>
-									<td class="row-{{ s[0] }} tag">{% print(s[2]) %}</td>	 
+									<td class="row-{{ s[0] }} tag">{% print(s[2]) %}</td>
+									<td class="row-{{ s[0] }} buttons"><div class="btn-group btn-group-xs">
+                                        <a class="btn btn-primary" href="/student/{{ s[1] }}"><span class="glyphicon glyphicon-user"></span></a></div></td>
 									<td class="row-{{ s[0] }} buttons"><div class="btn-group btn-group-xs">
 										<a onClick='editModal($(".row-{{ s[0] }}.id").text(), $(".row-{{ s[0] }}.name").text(), $(".row-{{ s[0] }}.tag").text());'  class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
 										<a href="/tags/delete?delid={% print(s[0]) %}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>

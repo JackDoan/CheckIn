@@ -21,11 +21,12 @@
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
 						<li class="{% block active_home %}{% endblock %}"> <a href="#">Home</a> </li>
-						<li class="{% block active_status %}{% endblock %}"> <a href="/status">Status</a> </li>
-						<li class="{% block active_data %}{% endblock %}"> <a href="/data">Data</a> </li>
-						<li class="{% block active_tags %}{% endblock %}"> <a href="/tags">Tags</a> </li>
+						<li class="{% block active_data %}{% endblock %}"> <a href="/records">Records</a> </li>
+						<li class="{% block active_tags %}{% endblock %}"> <a href="/students">Students</a> </li>
+						<li class="{% block active_classes %}{% endblock %}"> <a href="/class">Classes</a> </li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
+						<li class="{% block active_settings %}{% endblock %}"><a href="/settings">Settings</a></li>
 						<li><a onClick="window.location = signout">Sign Out</a></li>
 					</ul>
 				</div>

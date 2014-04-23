@@ -3,10 +3,37 @@ from flask import Flask, render_template, request, Response
 import sqlite3, time
 from functools import wraps
 
+def status_color(status):
+	if status[0] == 'T':
+		status = btnyellow + status
+	elif status[0] == 'P':
+		status = btngreen + status
+	elif status[0] == 'O':
+		status = btnblue + status
+	return status
+
+def get_config():
+	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
+	db = conn.cursor()
+	db.execute("Select * from config;")
+	config = db.fetchall()
+	conn.close()
+	classblocks = []
+	for pair in config:
+		if pair[0] == "class_blocks":
+			blocks = str(pair[1]).split()
+			for block in blocks:
+				block_start = block + "_start"
+				block_end = block + "_end"
+				for each in config:
+					if each[0] == block_start:
+						block_start_time = each[1]
+					if each[0] == block_end:
+						block_end_time = each[1]
+				classblocks.append([block, int(block_start_time), int(block_end_time)])
+	return classblocks
+
 def check_auth(username, password):
-	"""This function is called to check if a username /
-	password combination is valid.
-	"""
 	return username == 'admin' and password == 'secret'
 
 def authenticate():
@@ -27,39 +54,25 @@ def requires_auth(f):
 
 app = Flask(__name__)
 
+btnblue = '<button type="button" class="btn btn-primary btn-xs">'
+btngreen = '<button type="button" class="btn btn-success btn-xs">'
+btnyellow = '<button type="button" class="btn btn-warning btn-xs">'
+
 @app.route('/')
 def login():
 	return render_template('login.html')
 
-@app.route('/data')
+@app.route('/records')
 @requires_auth
 def data():
 	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
 	db.execute("Select rowid,* from records order by rowid desc")
-	t_records = db.fetchall()
-	records = map(list, t_records)
-	db.execute("Select * from config;")
-	config = db.fetchall()
-	classblocks = []
-	for pair in config:
-		if pair[0] == "class_blocks":
-			blocks = str(pair[1]).split()
-			for block in blocks:
-				block_start = block + "_start"
-				block_end = block + "_end"
-				for each in config:
-					if each[0] == block_start:
-						block_start_time = each[1]
-					if each[0] == block_end:
-						block_end_time = each[1]
-				classblocks.append([block, int(block_start_time), int(block_end_time)])
+	records = map(list, db.fetchall())
+	classblocks = get_config()
 	for r in records[:]:
 		db.execute("Select name from students where rowid=?", (r[1],))
 		r[1] = str(db.fetchone()[0])
-		btnblue = '<button type="button" class="btn btn-primary btn-xs">'
-		btngreen = '<button type="button" class="btn btn-success btn-xs">'
-		btnyellow = '<button type="button" class="btn btn-warning btn-xs">'
 		if r[4] == "Test":
 			classtime = int(time.strftime('%H%M', time.localtime(r[3]))) 
 			if classtime > int(classblocks[0][1] - 48) and classtime < classblocks[0][1]: #TODO: -8 accounts for 1st grace period
@@ -89,20 +102,10 @@ def data():
 				status = 'OOB: record at ' + str(classtime)
 
 			db.execute('update records set status=? where rowid=?', (status, r[0]))
-			if status[0] == 'T':
-				r[4] = btnyellow + status
-			elif status[0] == 'P':
-				r[4] = btngreen + status
-			else:
-				r[4] = btnblue + status
+			r[4] = status_color(status)
 		else:
 			#	records.remove(r)	removes OOB errors from display -- commented out for testing.
-			if r[4][0] == 'T':
-				r[4] = btnyellow + r[4]
-			elif r[4][0] == 'P':
-				r[4] = btngreen + r[4]
-			elif r[4][0] == 'O':
-				r[4] = btnblue + r[4]
+			r[4] = status_color(r[4])
 
 		r[3] = time.strftime('%I:%M:%S on %m/%d', time.localtime(r[3])) #%I is 12 hour clock
 	conn.commit()
@@ -123,16 +126,19 @@ def studentPage(student):
 		conn.close()
 		tags()
 	db.execute("Select rowid,* from records where `student_id`=? order by rowid desc", (student_id,))
-	t_records = db.fetchall()
-	records = map(list, t_records)
+	records = map(list, db.fetchall())
 	i = 0
 	for r in records:
-		#comptime = time.strftime('%H%M', time.localtime(r[3])
-		#if comptime 
 		r[3] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(r[3]))
-
+		r[4] = status_color(r[4])
+	classblocks = get_config()
+	classlist = []
+	for block in classblocks:
+		db.execute("Select * from classes where timeblock = ?", (block[0],))
+		result = map(list, db.fetchall())
+		classlist.append(result)
 	conn.close()
-	return render_template('student.html', records=records, student_id = student_id, tag=tag, name=student)
+	return render_template('student.html', classblocks=classblocks, classlist=classlist, records=records, student_id = student_id, tag=tag, name=student)
 
 @app.route('/student/<student>/edit')
 @requires_auth
@@ -146,27 +152,24 @@ def studentEdit(student):
 	conn.commit()
 	return studentPage(student)	
 
-
-@app.route('/tags')
+@app.route('/students')
 @requires_auth
 def tags():
 	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
 	db.execute("Select rowid,* from students")
-	t_students = db.fetchall()
-	students = map(list, t_students)
+	students = map(list, db.fetchall())
 	conn.close()
 	newid = students[-1][0]+1
 	return render_template('tags.html', students=students, newid=newid)
 
-@app.route('/tags/add')
+@app.route('/students/add')
 @requires_auth
 def tagsadd():
 	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
 	db.execute("Select rowid,* from students")
-	t_students = db.fetchall()
-	students = map(list, t_students)
+	students = map(list, db.fetchall())
 	newid = students[-1][0]+1
 	if request.args.getlist('name') and request.args.getlist('tag'):
 		newstudent = request.args.getlist('name')[0]
@@ -182,7 +185,7 @@ def tagsadd():
 		return render_template('tags.html', students=students, newid=newid)
 
 
-@app.route('/tags/delete', methods=['GET', 'POST'])
+@app.route('/students/delete', methods=['GET', 'POST'])
 def tagsdel():
 	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
@@ -197,7 +200,7 @@ def tagsdel():
 	newid = students[-1][0]+1
 	return render_template('tags.html', newid=newid, students=students)
 
-@app.route('/tags/edit', methods=['GET', 'POST'])
+@app.route('/students/edit', methods=['GET', 'POST'])
 def tagsedit():
 	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
@@ -211,6 +214,15 @@ def tagsedit():
 	conn.close()
 	newid = students[-1][0]+1
 	return render_template('tags.html', newid=newid, students=students)
+
+@app.route('/class', methods=['GET', 'POST'])
+def classes_list():
+	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
+	db = conn.cursor()
+	db.execute("Select * from classes")
+	classes = db.fetchall()
+	conn.close()
+	return render_template('classes.html', classes=classes)
 
 @app.route('/debug', methods=['GET', 'POST'])
 def le_debug():
