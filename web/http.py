@@ -2,6 +2,9 @@
 from flask import Flask, render_template, request, Response
 import sqlite3, time
 from functools import wraps
+import libcheckinweb
+chn = libcheckinweb
+
 
 def status_color(status):
 	if status[0] == 'T':
@@ -107,29 +110,21 @@ def data():
 			#	records.remove(r)	removes OOB errors from display -- commented out for testing.
 			r[4] = status_color(r[4])
 
-		r[3] = time.strftime('%I:%M:%S on %m/%d', time.localtime(r[3])) #%I is 12 hour clock
+		r[3] = epochToString(r[3])
 	conn.commit()
 	conn.close()
 	return render_template('data.html', records=records)
 
-@app.route('/student/<student>')
+@app.route('/student/<student_id>')
 @requires_auth
-def studentPage(student):
+def newstudentPage(student_id):
 	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
-	db.execute("Select rowid,* from students where `name`=?", (student,))
-	result = db.fetchall()
-	if result:
-		tag = result[0][2]
-		student_id = result[0][0]
-	else:
-		conn.close()
-		tags()
+	s = chn.Student(student_id)
 	db.execute("Select rowid,* from records where `student_id`=? order by rowid desc", (student_id,))
 	records = map(list, db.fetchall())
-	i = 0
 	for r in records:
-		r[3] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(r[3]))
+		r[3] = chn.epochToString(r[3])
 		r[4] = status_color(r[4])
 	classblocks = get_config()
 	classlist = []
@@ -138,7 +133,7 @@ def studentPage(student):
 		result = map(list, db.fetchall())
 		classlist.append(result)
 	conn.close()
-	return render_template('student.html', classblocks=classblocks, classlist=classlist, records=records, student_id = student_id, tag=tag, name=student)
+	return render_template('student.html', currentclasses=s.classes, classblocks=classblocks, classlist=classlist, records=records, student_id = student_id, tag=s.tag, name=s.name)
 
 @app.route('/student/<student>/edit')
 @requires_auth

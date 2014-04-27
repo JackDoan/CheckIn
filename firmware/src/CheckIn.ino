@@ -1,7 +1,7 @@
 #include <LiquidCrystal.h>
 String cmdData = NULL;				 // a string to hold incoming data
 boolean stringComplete = false;
-LiquidCrystal lcd(2, 3, 4, 5, 6, 7); 
+LiquidCrystal lcd(8, 7, 6, 5, 4, 3, 2); 
 void setup()	
 {
 	Serial.begin(9600);				// open connection to ID-12LA
@@ -9,8 +9,6 @@ void setup()
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);			// reserve some data for the serialEvent read
 	pinMode(10, OUTPUT);
-	pinMode(8, OUTPUT);
-	digitalWrite(8, HIGH);
 	lcd.begin(16, 2);
 	lcd.print("Initializing...");
 	tone(10, 1600, 200);
@@ -45,10 +43,14 @@ if (stringComplete) {
 		cmdData = NULL;
 	}
 	if (cmdData.startsWith("BL1")) {
-	 digitalWrite(8, HIGH);
+	// digitalWrite(8, HIGH);
+		stringComplete = false;
+        cmdData = NULL;
 	}
 	if (cmdData.startsWith("BL0")) {
-	 digitalWrite(8, LOW);
+	 //digitalWrite(8, LOW);
+		stringComplete = false;
+        cmdData = NULL;
 	}
 	if (cmdData.startsWith("W")) {
 		char bytes[16];

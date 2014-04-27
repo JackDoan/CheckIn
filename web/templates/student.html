@@ -72,10 +72,15 @@
                             <tbody>
 								{% for t in classblocks %}
 								<tr>
+								{% set outer_loop = loop %}
                                 	<td> {% print t[0] %}</td>
                                     <td><select class="form-control">
 									{% for c in classlist[loop.index0] %}
-										<option>{{ c[0] }} - {{ c[1] }} - {{ c[2] }} - {{ c[4] }}</option>
+										<option value="{{ c[0] }}" 
+										{% if c[0] == currentclasses[outer_loop.index0] %} 
+											selected="true"
+										{% endif %}
+										>{{ c[0] }} - {{ c[1] }} - {{ c[2] }} - {{ c[4] }}</option>
 									{% endfor %}
 									<option>None</option>
 									</select></td>

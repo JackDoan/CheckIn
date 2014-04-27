@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-    {% block title %}Tags{% endblock %}
-    {% block active_tags %}active{% endblock %}
-    {% block big_header %}Student / Tag Management{% endblock %}
-    {% block little_header %}Add, update, and remove students and tags.{% endblock %}
-    {% block body %}
+	{% block title %}Tags{% endblock %}
+	{% block active_tags %}active{% endblock %}
+	{% block big_header %}Student / Tag Management{% endblock %}
+	{% block little_header %}Add, update, and remove students and tags.{% endblock %}
+	{% block body %}
 		<div class="col-sm-8">
 			<div class="panel panel-default">
 					<div class="panel-heading">
@@ -27,9 +27,9 @@
 									<td class="row-{{ s[0] }} name">{% print(s[1]) %}</td>
 									<td class="row-{{ s[0] }} tag">{% print(s[2]) %}</td>
 									<td class="row-{{ s[0] }} buttons"><div class="btn-group btn-group-xs">
-                                        <a class="btn btn-primary" href="/student/{{ s[1] }}"><span class="glyphicon glyphicon-user"></span></a></div></td>
+										<a class="btn btn-primary" href="/student/{{ s[0] }}"><span class="glyphicon glyphicon-user"></span></a></div></td>
 									<td class="row-{{ s[0] }} buttons"><div class="btn-group btn-group-xs">
-										<a onClick='editModal($(".row-{{ s[0] }}.id").text(), $(".row-{{ s[0] }}.name").text(), $(".row-{{ s[0] }}.tag").text());'  class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
+										<a onClick='editTag($(".row-{{ s[0] }}.id").text(), $(".row-{{ s[0] }}.name").text(), $(".row-{{ s[0] }}.tag").text());'  class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
 										<a href="/tags/delete?delid={% print(s[0]) %}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
 									</div></td>
 								</tr>
@@ -79,11 +79,11 @@
 	  <div class="modal-body">
 		<form class="form-horizontal" method="get" action="/tags/edit">
 	<div class="form-group">
-        <label class="control-label col-md-4" for="modal_id">Student ID #</label>
-        <div class="col-md-6">
-            <input type="text" class="form-control" id="modal_id" name="id" value="" disabled/>
-        </div>
-    </div>
+		<label class="control-label col-md-4" for="modal_id">Student ID #</label>
+		<div class="col-md-6">
+			<input type="text" class="form-control" id="modal_id" name="id" value="" disabled/>
+		</div>
+	</div>
 	<div class="form-group">
 		<label class="control-label col-md-4" for="modal_name">Student Name</label>
 		<div class="col-md-6">

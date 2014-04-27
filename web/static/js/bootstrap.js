@@ -8,7 +8,15 @@
  * CheckIn JS Addendum
  * Jack Doan - 4/4/2014
  * ================================================= */
-	function editModal(id, classname, teacher, time, loc)
+	function editTag(id, name, tag)
+	{
+	$('#modal_id').attr('value', id);
+	$('#modal_name_show').attr('value', name);
+	$('#modal_tag').attr('value', tag);
+	$('#myModal').modal();
+	}
+
+	function editClass(id, classname, teacher, time, loc)
 	{
 	$('#modal_id').attr('value', id);
 	$('#modal_class').attr('value', classname);
