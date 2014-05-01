@@ -16,13 +16,15 @@
 	$('#myModal').modal();
 	}
 
-	function editClass(id, classname, teacher, time, loc)
+	function editClass(id, classname, teacher, time, loc, slots)
 	{
+	$('#modal_id_show').attr('value', id);
 	$('#modal_id').attr('value', id);
 	$('#modal_class').attr('value', classname);
 	$('#modal_teacher').attr('value', teacher);
 	$('#modal_time').attr('value', time);
 	$('#modal_loc').attr('value', loc);
+	$('#modal_slots').attr('value', slots);
 	$('#myModal').modal();
 	}
 	function makeEditable(rowid, row, name, tag, buttons) 

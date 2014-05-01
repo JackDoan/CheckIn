@@ -1,5 +1,28 @@
 import sqlite3, time
 
+btnblue = '<button type="button" class="btn btn-primary btn-xs">'
+btngreen = '<button type="button" class="btn btn-success btn-xs">'
+btnyellow = '<button type="button" class="btn btn-warning btn-xs">'
+
+
+def check_auth(username, password):
+	return username == 'admin' and password == 'secret'
+
+def status_color(status):
+	if status[0] == 'T':
+		status = btnyellow + status
+	elif status[0] == 'P':
+		status = btngreen + status
+	elif status[0] == 'O':
+		status = btnblue + status
+	return status
+
+#####
+# CRUDE HACK TO MAKE PRESENTING SUPER EASY
+#####
+def get_config():
+	return [['School', int(900), int(1610)], ['After-School', int(1900), int(2100)]]
+
 def epochToString(epoch):
 	return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(epoch))
 

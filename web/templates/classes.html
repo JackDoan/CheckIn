@@ -18,6 +18,7 @@
 									<th>Teacher</th>
 									<th>Time</th>
 									<th>Location</th>
+									<th>Slots</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -28,10 +29,11 @@
 									<td class="row-{{ c[0] }} classname">{% print(c[1]) %}</td>
 									<td class="row-{{ c[0] }} teacher">{% print(c[2]) %}</td>
 									<td class="row-{{ c[0] }} time">{% print(c[3]) %}</td>
-									<td class="row-{{ c[0] }} loc">{% print(c[4]) %}</td>	 
+									<td class="row-{{ c[0] }} loc">{% print(c[4]) %}</td>
+									<td class="row-{{ c[0] }} slots">{{ c[5] }}</td>
 									<td class="row-{{ c[0] }} buttons"><div class="btn-group btn-group-xs">
-										<a onClick='editModal($(".row-{{ c[0] }}.id").text(), $(".row-{{ c[0] }}.classname").text(), $(".row-{{ c[0] }}.teacher").text(), $(".row-{{ c[0] }}.time").text(), $(".row-{{ c[0] }}.loc").text());'  class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
-										<a href="/tags/delete?delid={% print(c[0]) %}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+										<a onClick='editClass($(".row-{{ c[0] }}.id").text(), $(".row-{{ c[0] }}.classname").text(), $(".row-{{ c[0] }}.teacher").text(), $(".row-{{ c[0] }}.time").text(), $(".row-{{ c[0] }}.loc").text(), $(".row-{{ c[0] }}.slots").text());'  class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
+										<a href="/classes/delete?delid={% print(c[0]) %}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
 									</div></td>
 								</tr>
 								{% endfor %} 
@@ -42,6 +44,7 @@
 								<td><input type="text" class="form-control" placeholder="Teacher" name="teacher"></td>
 								<td><input type="text" class="form-control" placeholder="Period" name="class"></td>
 								<td><input type="text" class="form-control" placeholder="Room #" name="location"></td>
+								<td><input type="text" class="form-control" placeholder="Slots" name="slots"></td>
 								<td><button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button></td>
 								</form></div></tr>
 							</tbody>
@@ -57,14 +60,15 @@
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		<h4 class="modal-title" id="myModalLabel">Edit Class</h4>
 	  </div>
-	  <div class="modal-body">
+	<div class="modal-body">
 		<form class="form-horizontal" method="get" action="/classes/edit">
-	<div class="form-group">
-        <label class="control-label col-md-4" for="modal_id">Course ID</label>
-        <div class="col-md-6">
-            <input type="text" class="form-control" id="modal_id" name="id" value="" disabled/>
-        </div>
-    </div>
+		<div class="form-group">
+    	    <label class="control-label col-md-4" for="modal_id">Course ID</label>
+    	    <div class="col-md-6">
+				<input type="hidden" class="form-control" id="modal_id" name="id" value=""/>
+        	    <input type="text" class="form-control" id="modal_id_show" name="id_show" value="" disabled/>
+        	</div>
+		</div>
 	<div class="form-group">
 		<label class="control-label col-md-4" for="modal_class">Class Name</label>
 		<div class="col-md-6">
@@ -87,6 +91,12 @@
         <label class="control-label col-md-4" for="modal_loc">Room Number</label>
         <div class="col-md-6">
             <input type="text" class="form-control" id="modal_loc" name="loc" value=""/>
+        </div>
+    </div>
+	 <div class="form-group">
+        <label class="control-label col-md-4" for="modal_slots">Slots</label>
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="modal_slots" name="slots" value=""/>
         </div>
     </div>
 	  </div>
