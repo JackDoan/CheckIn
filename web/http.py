@@ -110,7 +110,7 @@ def data():
 			#	records.remove(r)	removes OOB errors from display -- commented out for testing.
 			r[4] = status_color(r[4])
 
-		r[3] = epochToString(r[3])
+		r[3] = chn.epochToString(r[3])
 	conn.commit()
 	conn.close()
 	return render_template('data.html', records=records)
