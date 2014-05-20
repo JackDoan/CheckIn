@@ -11,6 +11,7 @@
 	function editTag(id, name, tag)
 	{
 	$('#modal_id').attr('value', id);
+	$('#modal_id_show').attr('value', id);
 	$('#modal_name_show').attr('value', name);
 	$('#modal_tag').attr('value', tag);
 	$('#myModal').modal();

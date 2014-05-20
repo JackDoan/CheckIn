@@ -199,10 +199,10 @@ def tagsdel():
 def tagsedit():
 	conn = sqlite3.connect("/usr/local/CheckIn/chn.db")
 	db = conn.cursor()
-	if request.args.getlist('name') and request.args.getlist('tag'):
-		name = request.args.getlist('name')[0]
+	if request.args.getlist('id') and request.args.getlist('tag'):
+		sid = request.args.getlist('id')[0]
 		tag = request.args.getlist('tag')[0]
-		db.execute("Update `students` set `tag`=? WHERE `name`=?;", (tag, name,))
+		db.execute("Update `students` set `tag`=? WHERE `rowid`=?;", (tag, sid,))
 	db.execute("Select rowid,* from students")
 	students = db.fetchall()
 	conn.commit()
@@ -225,6 +225,6 @@ def le_debug():
 	return 'Ohnoes'
 
 if __name__ == '__main__':
-	app.debug = True
+#	app.debug = True
 	app.run(host='0.0.0.0')
 

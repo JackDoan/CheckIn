@@ -30,12 +30,12 @@
 										<a class="btn btn-primary" href="/student/{{ s[0] }}"><span class="glyphicon glyphicon-user"></span></a></div></td>
 									<td class="row-{{ s[0] }} buttons"><div class="btn-group btn-group-xs">
 										<a onClick='editTag($(".row-{{ s[0] }}.id").text(), $(".row-{{ s[0] }}.name").text(), $(".row-{{ s[0] }}.tag").text());'  class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
-										<a href="/tags/delete?delid={% print(s[0]) %}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+										<a href="/delete?delid={% print(s[0]) %}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
 									</div></td>
 								</tr>
 								{% endfor %} 
 								<tr>
-								<div class="input-group input-group-sm"><form action="/tags/add" method="get">
+								<div class="input-group input-group-sm"><form action="/students/add" method="get">
 								<td><input type="text" id="disabledInput" class="form-control" value="New ID: {{ newid }}" disabled></td>
 								<td><input type="text" class="form-control" placeholder="New Name" name="name"></td>
 								<td><input type="text" class="form-control" placeholder="Scan New Tag Here" name="tag"></td>
@@ -51,7 +51,7 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">Find a Student</h3>
 					</div>
-					<div class="panel-body"><form action="/tags/search" method="get">
+					<div class="panel-body"><!--form action="/tags/search" method="get" -->
 						<div class="input-group">
 							<input type="text" class="form-control" name="id" placeholder="ID to find">
 							<span class="input-group-btn"><button class="btn btn-primary" type="button">Go!</button></span>
@@ -77,17 +77,17 @@
 		<h4 class="modal-title" id="myModalLabel">Edit Student</h4>
 	  </div>
 	  <div class="modal-body">
-		<form class="form-horizontal" method="get" action="/tags/edit">
+		<form class="form-horizontal" method="get" action="/students/edit">
 	<div class="form-group">
 		<label class="control-label col-md-4" for="modal_id">Student ID #</label>
 		<div class="col-md-6">
-			<input type="text" class="form-control" id="modal_id" name="id" value="" disabled/>
+			<input type="hidden" id="modal_id" name="id" value=""/>
+			<input type="text" class="form-control" id="modal_id_show" name="id" value="" disabled/>
 		</div>
 	</div>
 	<div class="form-group">
 		<label class="control-label col-md-4" for="modal_name">Student Name</label>
 		<div class="col-md-6">
-			<input type="hidden" id="modal_name" name="name" value=""/>
 			<input type="text" class="form-control" id="modal_name_show" value="" disabled/>
 		</div>
 	</div>
